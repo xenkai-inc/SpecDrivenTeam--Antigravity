@@ -1,0 +1,10 @@
+# 環境依存・秘密情報（絶対に commit しない）
+.env
+.env.*
+!.env.local.example
+
+# ローカル起動設定
+launch.json
+
+# OS
+.DS_Store

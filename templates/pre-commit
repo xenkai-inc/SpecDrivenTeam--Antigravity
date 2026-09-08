@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#
+# SpecDrivenTeam template: 秘密情報スキャン pre-commit フック（任意導入・既定 OFF）
+#
+# 導入したい人向けの雛形です。導入しなくても、commit 前の秘密情報チェックは
+# オーケストレーター（伴走役）の完了フロー（AGENTS.md「git の扱い」）が毎回手動で行います。
+# このフックは、その手作業を機械的に二重化したい人向けの上乗せです。
+#
+# 導入手順（3行）：
+#   1. cp templates/pre-commit .git/hooks/pre-commit
+#   2. chmod +x .git/hooks/pre-commit
+#   3. 以降、commit のたびに自動でこのチェックが走ります（外したい場合は .git/hooks/pre-commit を削除）
+
+set -euo pipefail
+
+# commit しようとしている変更（staged diff）から、秘密情報らしき文字列を簡易 grep する。
+# 完全な検知ではありません（あくまで簡易チェック）。見つかった場合は commit を止めます。
+
+# 各パターンの由来（市民開発者が使いがちなサービス）:
+#   sk-...        OpenAI / Anthropic 系 API キー
+#   AKIA...       AWS アクセスキー
+#   BEGIN ... KEY 秘密鍵ファイルの中身
+#   password=/api_key=  直書きされた値
+#   AIza...       Google Cloud (GCP) / Firebase API キー
+#   xoxa-/xoxb-/xoxp-   Slack トークン（bot/app/user 用）
+#   eyJ...        JWT 形式のトークン（Supabase の service_role キー等）。
+#                 誤検知を避けるため、JWT の3パート構造（ヘッダ.ペイロード.署名）
+#                 かつ十分な長さのものだけを対象にする
+PATTERN='(sk-[A-Za-z0-9]{10,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|password\s*=\s*["'"'"'][^"'"'"']+["'"'"']|api[_-]?key\s*=\s*["'"'"'][^"'"'"']+["'"'"']|AIza[A-Za-z0-9_-]{35}|xox[abp]-[A-Za-z0-9-]{10,}|eyJ[A-Za-z0-9_-]{15,}\.eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{10,})'
+
+MATCHES=$(git diff --cached -U0 | grep -inE "$PATTERN" || true)
+
+if [ -n "$MATCHES" ]; then
+  echo "秘密情報らしき文字列が commit しようとしている変更に含まれています:"
+  echo "$MATCHES"
+  echo ""
+  echo "API キー・パスワード・トークンをコードに直接書かず、.env に移してください。"
+  echo "誤検知の場合は、このフックを一時的にスキップできます: git commit --no-verify"
+  exit 1
+fi
+
+exit 0
