@@ -68,8 +68,11 @@
    ```
 2. Google 側にファイルを作る（初回のみ。すでに `.clasp.json` があれば不要）
    ```bash
+   cp appsscript.json appsscript.json.bak
    clasp create --type webapp --title "<アプリ名>"
+   mv appsscript.json.bak appsscript.json
    ```
+   `clasp create` は `appsscript.json` を上書きするため、控えを取って戻す
 3. Gemini の API キーを入れる（初回のみ・自分の手で）
    - Apps Script のエディタ →「プロジェクトの設定」→「スクリプトプロパティ」
    - プロパティ名 `GEMINI_API_KEY`、値に取得したキー
@@ -88,8 +91,10 @@
 ## 保存して確認する
 
 ```bash
-clasp push
+clasp push --force
 ```
+
+`--force` を付けないと、`appsscript.json` を変えたときに「Skipping push.」と出て送られないことがあります。結果に「Pushed N files」と出れば送れています。
 
 確認用 URL（自分だけが開ける、最新の内容）：`https://script.google.com/macros/s/<@HEAD の ID>/dev`
 （ID は `clasp deployments` の `@HEAD` の行で分かります）

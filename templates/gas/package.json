@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test": "vitest run",
-    "push": "clasp push"
+    "push": "clasp push --force"
   },
   "devDependencies": {}
 }

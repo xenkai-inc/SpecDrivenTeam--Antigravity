@@ -7,7 +7,7 @@
 | 工程 | 担当 |
 |---|---|
 | プランの提示・利用者の OK | 伴走役（tech-lead） |
-| `.gs`・`.html` の実装、テスト実行、保存（`clasp push`）、確認用 URL の取得（`clasp deployments`） | 実装担当（coder） |
+| `.gs`・`.html` の実装、テスト実行、保存（`clasp push --force`）、確認用 URL の取得（`clasp deployments`） | 実装担当（coder） |
 | `clasp create`（Google ドライブにファイルを作る）の **利用者への確認** | 伴走役。OK が出たら実装担当に実行を委譲する |
 | 確認用 URL と「目で確かめる AC」のチェックリストを利用者に渡し、結果を受け取る | 伴走役 |
 | 確認用 URL で違いが見つかったときの修正 | 実装担当（伴走役が AC 番号と症状を添えて差し戻す） |
@@ -33,13 +33,21 @@
   ```bash
   clasp create --type webapp --title "<アプリ名>"
   ```
-  > 注意：このコマンドは `appsscript.json` を上書きすることがある。実行前に中身を控えておき、実行後に `timeZone`（`Asia/Tokyo`）と `webapp` の設定が元のままか確かめ、変わっていたら戻す
+  > 注意：このコマンドは `appsscript.json` を上書きする（clasp 3.4.1 で確認。`timeZone` が `America/New_York` になり、`webapp` の設定が消える）。実行前に控えを取り、実行後に戻す：
+  > ```bash
+  > cp appsscript.json appsscript.json.bak
+  > clasp create --type webapp --title "<アプリ名>"
+  > mv appsscript.json.bak appsscript.json
+  > ```
 
 ### 2. 保存（push）
 
 ```bash
-clasp push
+clasp push --force
 ```
+
+- **`--force` は必ず付ける**。`appsscript.json` が Google 側と違うとき、付けないと「Skipping push.」と出て **何も送られない**（対話なしで実行すると、上書きしてよいかの確認が「いいえ」扱いになるため。clasp 3.4.1 で確認）。PC 側が正本なので、常に付けてよい
+- 結果に「Pushed N files」と出て、`appsscript.json`・`.gs`・`.html` が並んでいることを確かめる。並んでいなければ送れていない
 
 利用者には一言添える：
 

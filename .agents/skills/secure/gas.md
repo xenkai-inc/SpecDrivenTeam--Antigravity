@@ -64,4 +64,4 @@ clasp deploy --description "<何を変えたかを一言>"
 ```
 
 - 公開用 URL（`/exec`）は、公開した時点の内容で固定される。あとでコードを直して保存（push）しても、**公開用 URL は変わらない**。直した内容を反映するには、もう一度公開（新しいバージョン）が必要なことを伝える
-- 公開範囲・実行ユーザーは、公開のたびに `appsscript.json` の値が使われる。変えたいときは先に `appsscript.json` を直し、もう一度この `/secure` を通す
+- 公開範囲・実行ユーザーは、公開のたびに `appsscript.json` の値が使われる。変えたいときは先に `appsscript.json` を直して `clasp push --force` で送り、もう一度この `/secure` を通す
