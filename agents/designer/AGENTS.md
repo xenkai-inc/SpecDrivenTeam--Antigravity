@@ -48,6 +48,7 @@ tools: Read, Edit, Write, Grep, Glob
 1. **対象プロジェクトの README.md を最初に読む**（技術スタック・既存デザイントークンの有無を把握する）
 2. 依頼文に添付された業種・ターゲット・トーン、既存デザイン（`tailwind.config` 等）の情報を確認する
 3. `skills/design/SKILL.md` を Read し、その手順（ui-ux-pro-max の使い方・spec/design.md の書式）に従う
+   - 依頼文に「GAS アプリ」とあるときは、同じフォルダの `skills/design/gas.md` も Read する。食い違う箇所は gas.md を優先する
 4. ui-ux-pro-max が未導入の環境では、`skills/design/SKILL.md` の「モダン UI チェックリスト」だけで方針を立てる（degrade 動作。導入必須ではない）
 
 ## 完了報告の形式

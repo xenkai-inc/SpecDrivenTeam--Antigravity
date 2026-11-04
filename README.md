@@ -51,6 +51,7 @@
 | skills/ spec・design・test・secure（4 本） | skills/ 同名（小改修 — 実行主体の注記） | 手動（差分小） |
 | skills/ **implement・review**（2 本） | skills/ 同名（**中改修 — 委譲・他者検査への転換**） | 手動（**乖離大・要注意**） |
 | templates/（5 本） | templates/ | 手動（原則そのまま） |
+| skills/*/gas.md（GAS アプリ用の追加ルール 6 本）・templates/gas/ | 同名 | 手動（gas.md は冒頭に役割分担の注記を足した小改修。templates/gas/ はそのまま） |
 | （該当なし — 単体版は 1 エージェント） | agents/ 各担当の JD（専門性・品質バー・判断観点を engineering チーム級に引き上げ） | **SpecDrivenTeam 固有の乖離**（単体版は 1 エージェントに全役の専門性を畳み込むため役割別 JD が無い。逆輸入するなら「5 役の能力を 1 人格に翻訳」する作業が要る。会話トーンは単体版と共通・不変） |
 
 </details>
@@ -125,8 +126,8 @@ SpecDrivenTeam/
 │   ├── reviewer/AGENTS.md #   レビュー担当（読み取りのみ）
 │   ├── security/AGENTS.md #   安全チェック担当（読み取りのみ）
 │   └── designer/AGENTS.md #   デザイン担当
-├── skills/                # 各工程の手順（spec / design / test / implement / review / secure）
-├── templates/             # README / 仕様 / テスト / pre-commit の雛形
+├── skills/                # 各工程の手順（spec / design / test / implement / review / secure）。各フォルダに GAS 用の gas.md
+├── templates/             # README / 仕様 / テスト / pre-commit の雛形（GAS 用は templates/gas/）
 └── scripts/
     ├── sync-agents.sh      # skills/ の内容を .agents/skills/ に同期する
     └── check-standalone.sh # このスターター自体の健全性チェック
@@ -149,6 +150,9 @@ A. あなたが Antigravity で選んだメインのモデルを、チーム全�
 
 ### Q. 自分の会社のルールを覚えさせたい。
 A. **CUSTOM.md に追記してください**（AGENTS.md は直接書き換えない）。本体を将来更新しても、あなたの追記が消えません。
+
+### Q. Google Apps Script（GAS）のアプリにも使えますか？
+A. 使えます（単体版と同じ対応です）。対象プロジェクトに `appsscript.json` があれば伴走役が GAS アプリと判定し、担当への依頼文に各工程の `gas.md` を添えます。判定・計算はアプリのコードを書き換えずに PC で自動テストし、画面・保存・AI の返答は、実装担当が保存（push）したあと確認用 URL で一緒に確かめます。公開前には、安全チェック担当が公開範囲と実行ユーザーの組み合わせを点検します。
 
 ### Q. セキュリティが心配です。
 A. 単体版と同じ「安全の約束」（API キーを晒さない・commit 前チェック・個人情報には認証を既定提案など）をチーム全員が守り、公開前には安全チェック担当が `/secure` で総点検します。あなたがチェックリストを覚える必要はありません。

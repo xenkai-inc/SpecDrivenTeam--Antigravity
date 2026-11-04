@@ -1,0 +1,9 @@
+{
+  "name": "my-gas-app",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "push": "clasp push"
+  },
+  "devDependencies": {}
+}
